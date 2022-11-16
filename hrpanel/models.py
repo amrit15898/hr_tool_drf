@@ -2,19 +2,24 @@
 
 from email.policy import default
 from django.db import models
-from adminpanel.models import *
+from adminpanel.models import User
+from adminpanel.models import designation
 
 
-# Create your models here.
+
+
 class Interview(models.Model):
     name = models.CharField(max_length = 200)
-    domain = models.ForeignKey(Domain, on_delete = models.PROTECT)
+    domain = models.CharField(max_length=20, choices=designation)
    
    
     datetime = models.DateTimeField(auto_now_add=False, auto_now=False)
-    interviewers = models.ManyToManyField(User)
+    interviewer = models.ForeignKey(User, on_delete = models.CASCADE)
+
     is_delete = models.BooleanField(default=False)
-    # cv = models.ImageField(upload_to = "static/images", null=Trure, blank= Tur)
+    attempt = models.IntegerField(default=0)
+    cv = models.ImageField(upload_to="static/images")
+
 
     
 
@@ -22,7 +27,7 @@ class Interview(models.Model):
 class Meeting(models.Model):
     agenda = models.CharField(max_length =200)
     description = models.TextField()
-    with_us = models.ManyToManyField(User)
+    withs = models.ManyToManyField(User)
     date_time = models.DateTimeField(auto_now_add=False, auto_now = False)
     
 

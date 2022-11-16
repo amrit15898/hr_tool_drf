@@ -2,11 +2,11 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth.hashers import make_password
 
-class DomainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Domain 
+# class DomainSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Domain 
 
-        fields = "__all__"
+#         fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,17 +21,20 @@ class UserSerializer(serializers.ModelSerializer):
         return super(UserSerializer, self).create(validated_data)
 
     def validate(self, data):
-        user = self.context.get("user")
-        print(user)
-        obj = User.objects.get(username=user)
+        # user = self.context.get("user")
+        # print(user)
+        # obj = User.objects.get(username=user)
     
        
   
-        if obj.role =="HR" and data["role"] == "MD":
-            raise serializers.ValidationError("Hr not create md")
+        # if obj.role =="HR" and data["role"] == "MD":
+        #     raise serializers.ValidationError("Hr not create md")
 
 
         email = User.objects.filter(email = data.get('email'))
+
+
+
 
         if email:
             raise serializers.ValidationError("email is already exits please try with diffrent email")

@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets
 # class AccessHrAndAdmin(BasePermission):
 #     def has_permission(self, request, view):
 #         now_user = request.user
@@ -27,8 +28,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserApi(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     
 
@@ -76,11 +77,15 @@ class UserApi(APIView):
 
     def delete(self, request):
         data = request.data
+        print("delete requets call hoi")
+        print(data)
         obj = User.objects.get(id=data.get('id'))
+        print(obj.email)
+    
         obj.is_delete = True
         obj.save()
         return Response({
-            "message": "data succssfully deleted"
+            "message": "data successfully deleted"
         })
 
     def patch(self, request):
@@ -122,3 +127,33 @@ class UserApi(APIView):
 
         })
        
+# class GetDomain(APIView):
+#     def get(self, request):
+#         objs = Domain.objects.all()
+#         serializer = DomainSerializer(objs, many=True)
+
+#         return Response({
+#             "data": serializer.data
+
+#         })
+
+class DestroyUser(viewsets.ViewSet):
+    def destroy(self, reuqest, pk):
+        try:
+            id = pk
+            obj = User.objects.get(id=id)
+            obj.delete()
+            return Response({
+                "message": "data deleted successfully"
+
+
+            })
+
+        except User.DoesNotExist:
+            return Response({
+                "message": "id not exit"
+            })
+
+
+
+        

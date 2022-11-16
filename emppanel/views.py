@@ -32,6 +32,7 @@ class NormalUserApi(APIView):
         context = {
             "user": user
         }
+        
 
         if not data.get('id'):
             return Response({
